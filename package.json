@@ -1,0 +1,22 @@
+{
+  "name": "storedemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p ./src",
+    "start": "npm run build -- -w",
+    "dev": "ts-node ./src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@biconomy/mexa": "^2.0.10",
+    "@ethereumjs/tx": "^3.3.0",
+    "ethereumjs-abi": "^0.6.8",
+    "ethereumjs-util": "^7.1.0",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5",
+    "web3": "^1.4.0"
+  }
+}
