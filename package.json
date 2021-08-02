@@ -13,6 +13,7 @@
   "dependencies": {
     "@biconomy/mexa": "^2.0.10",
     "@ethereumjs/tx": "^3.3.0",
+    "eth-sig-util": "^2.5.3",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^7.1.0",
     "ts-node": "^10.1.0",
