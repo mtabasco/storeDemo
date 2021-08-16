@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
+import { PromiEvent, TransactionReceipt } from 'web3-core';
 import { Biconomy } from '@biconomy/mexa';
 import { signTypedData_v4 } from 'eth-sig-util';
 import Common, { CustomChain } from '@ethereumjs/common';
@@ -16,8 +17,8 @@ const config = {
   POLY_SPN_TOKEN_ADDRESS: '0x8174Ab11EEd70297311f7318a71d9e9f48466Fff', // Mumbai SPN
   POLY_BADGE_STORE_ADDRESS: '0xab221c69D8EEcF6aC7944efD4589DA206AE1046C',
   BICONOMY_API_KEY: 'tYSKReKvQ.c2fbc08c-3991-49b8-8ed8-cb945b0e55fe',
-  USER_ADDRESS: '0x39a1e6759982d5409e1a496c31571A9352CA229E',
-  PRIVATE_KEY: 'bda187d9e6482b03ab0d696f5e33de5e63cc4ab11490498cf5d13c6215c4719c',
+  USER_ADDRESS: '0x6A89ab508E8D4c69aEE0b4443f18bC1590AE2023',
+  PRIVATE_KEY: 'aff2b7f298394adcd619ee20fdbe9bf1d7a7215c9348bb5a370fdccf7c54253a',
 };
 
 // Initialize constants
@@ -80,7 +81,7 @@ const getSignatureParameters = (web3, signature) => {
 
   const biconomy = new Biconomy(getProvider(), {
     apiKey: config.BICONOMY_API_KEY,
-    debug: true,
+    debug: false,
   });
   const web3 = new Web3(biconomy);
 
@@ -135,10 +136,11 @@ const getSignatureParameters = (web3, signature) => {
 
       console.log(raw);
 
-      /* web3.eth.sendSignedTransaction(raw)
-        .once('transactionHash', (hash: string) => console.log(hash))
-        .once('receipt', (rec) => console.log(rec))
-        .once('error', (err) => console.log(err)); */
+      web3.eth.sendSignedTransaction(raw)
+        .on('transactionHash', (hash: string) => console.log('hash----------', hash))
+        .on('receipt', (rec) => console.log('receipt----------', rec))
+        .on('error', (err) => console.log('err---------------', err));
+
 
     })
     .onEvent(biconomy.ERROR, (error, message) => {

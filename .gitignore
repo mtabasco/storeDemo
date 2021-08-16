@@ -1,0 +1,17 @@
+# Dependency directories
+node_modules/
+
+# history
+.history
+
+# npm cache directory
+.npm
+
+# eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+
+# build folder ---- commented until package are published to test over github
+# build
