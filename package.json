@@ -7,13 +7,15 @@
     "build": "tsc -p ./src",
     "start": "npm run build -- -w",
     "dev": "ts-node ./src/index.ts",
-    "member-badge": "ts-node ./src/createMemberBadge.ts"
+    "member-badge": "ts-node ./src/createMemberBadge.ts",
+    "transfer-badge": "ts-node ./src/transferBadge.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@biconomy/mexa": "^2.0.10",
     "@ethereumjs/tx": "^3.3.0",
+    "axios": "^0.21.4",
     "eth-sig-util": "^2.5.3",
     "ethereumjs-abi": "^0.6.8",
     "ethereumjs-util": "^7.1.0",

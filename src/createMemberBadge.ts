@@ -3,56 +3,48 @@ import { AbiItem } from 'web3-utils';
 import { Biconomy } from '@biconomy/mexa';
 import { signTypedData_v4 } from 'eth-sig-util';
 import Common, { CustomChain } from '@ethereumjs/common';
-import { Transaction as Tx } from '@ethereumjs/tx';
+import { Transaction as Tx, TxData } from '@ethereumjs/tx';
 import PLATFORM_SPN_ABI from './contracts/SapienPlatformSPN.json';
 import BADGE_STORE_ABI from './contracts/BadgeStore.json';
+import { BN } from 'ethereumjs-util'
 const abi = require('ethereumjs-abi');
+const axios = require('axios');
 
 
 // config...
 const web3config = {
-  wsProvider: 'wss://ws-matic-mumbai.chainstacklabs.com',
-  sapienAccount: '--',
-  sapienPrivKey: '--',
-  spnTokenAddress: '0x8174Ab11EEd70297311f7318a71d9e9f48466Fff',
-  badgeStoreAddress: '0xab221c69D8EEcF6aC7944efD4589DA206AE1046C',
+  httpProvider: 'https://polygon-rpc.com/',
+  sapienAccount: '0x9Ba109487226cB29E54D1FC55f5E55Ebff3f0Bfe',
+  sapienPrivKey: '73f40c9501c430890571d62f81fa3647c80801225524283447e68f6b64325cca',
+  spnTokenAddress: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA',
+  badgeStoreAddress: '0x975dE233452b915219373bFf5A49b1C81cD807eF',
 };
 
 
 // main
 (async () => {
 
-  const getProvider = () => {
-    const provider = new Web3.providers.WebsocketProvider(web3config.wsProvider);
-    provider.on('connect', () => console.log('WS Connected!'))
-    provider.on('error', () => {
-      console.error('WS Error');
-    })
-    provider.on('end', () => {
-      console.error('WS End');
-      web3.setProvider(getProvider());
-    })
-
-    return provider;
-  }
-  const web3 = new Web3(getProvider());
+  const web3 = new Web3(new Web3.providers.HttpProvider(web3config.httpProvider));
   const spnContract = new web3.eth.Contract(PLATFORM_SPN_ABI as AbiItem[], web3config.spnTokenAddress);
   const badgeStoreContract = new web3.eth.Contract(BADGE_STORE_ABI as AbiItem[], web3config.badgeStoreAddress);
 
 
-  const contractSignature = badgeStoreContract.methods.createBadge('0xeC736346eBf9f995a40006147923CD8Ad7bfb2d7', 0).encodeABI();
+  const contractSignature = badgeStoreContract.methods.createBadge('0x9Ba109487226cB29E54D1FC55f5E55Ebff3f0Bfe', 0).encodeABI();
+
+  const gasPrice = await axios.get('https://gasstation-mainnet.matic.network')
+  .then(response => response.data?.fastest);
 
   web3.eth.getTransactionCount(web3config.sapienAccount)
     .then(txCount => {
-      const txObject = {
+      const txObject: TxData = {
         nonce: web3.utils.toHex(txCount),
-        gasPrice: 30000000000,
+        gasPrice: web3.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
         gasLimit: 300000,
         to: web3config.badgeStoreAddress,
         data: contractSignature
       };
 
-      const common = Common.custom(CustomChain.PolygonMumbai);
+      const common = Common.custom(CustomChain.PolygonMainnet);
 
       const tx = Tx.fromTxData(txObject, { common });
       const signedTx = tx.sign(Buffer.from(web3config.sapienPrivKey, 'hex'));

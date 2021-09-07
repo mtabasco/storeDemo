@@ -29,8 +29,8 @@ const config = {
   POLY_SPN_TOKEN_ADDRESS: '0x20f7a3ddf244dc9299975b4da1c39f8d5d75f05a', // mainnet SPN
   POLY_BADGE_STORE_ADDRESS: '0x975dE233452b915219373bFf5A49b1C81cD807eF',
   BICONOMY_API_KEY: 'pQ1Z6RGoB.def61969-2863-4a9b-98a4-d2c50fa2b8a0',
-  USER_ADDRESS: '0x6A89ab508E8D4c69aEE0b4443f18bC1590AE2023',
-  PRIVATE_KEY: 'aff2b7f298394adcd619ee20fdbe9bf1d7a7215c9348bb5a370fdccf7c54253a',
+  USER_ADDRESS: '0x9Ba109487226cB29E54D1FC55f5E55Ebff3f0Bfe',
+  PRIVATE_KEY: '73f40c9501c430890571d62f81fa3647c80801225524283447e68f6b64325cca',
 }; 
 
 // Initialize constants
@@ -104,7 +104,7 @@ const getSignatureParameters = (web3, signature) => {
       const contract = new web3.eth.Contract(BADGE_STORE_ABI as AbiItem[], config.POLY_BADGE_STORE_ADDRESS);
 
       const functionSignature = contract.methods
-        .purchaseBadge(1, 1)
+        .safeTransferFrom('0x9Ba109487226cB29E54D1FC55f5E55Ebff3f0Bfe', '0x8704b694667eC0645a7eEDF1518A8992fF334690', 1, 1, '0x00')
         .encodeABI();
 
       const nonce = await contract.methods.getNonce(config.USER_ADDRESS).call();
