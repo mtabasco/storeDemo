@@ -8,7 +8,8 @@
     "start": "npm run build -- -w",
     "dev": "ts-node ./src/index.ts",
     "member-badge": "ts-node ./src/createMemberBadge.ts",
-    "transfer-badge": "ts-node ./src/transferBadge.ts"
+    "transfer-badge": "ts-node ./src/transferBadge.ts",
+    "grant-badge": "ts-node ./src/grantBadge.ts"
   },
   "author": "",
   "license": "ISC",
